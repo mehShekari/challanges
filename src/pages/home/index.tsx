@@ -22,17 +22,126 @@ const Wrapper = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    flex-direction: column;
+    .header
+    {
+      text-align: center;
+      width: 100%;
+      padding: 20px 0px;
+    }
 
-    background: red;
+    .body
+    {
+      width: max-content;
+      margin: 0 auto;
+      padding: 10px;
+    }
+  }
+
+  .section_1
+  {
+    .header > h2
+    {
+      
+    }
+
+    .body
+    {
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
+  }
+  .section_2
+  {
+    .header > h2
+    {
+      
+    }
+
+    .body
+    {
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+
+    }
+  }
+  .section_3
+  {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    .header > h2
+    {
+      
+    }
+
+    .body
+    {
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
+  }
+  .section_4
+  {
+    .header > h2
+    {
+      
+    }
+
+    .body
+    {
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
+  }
+  .section_5
+  {
+    .header > h2
+    {
+      
+    }
+
+    .body
+    {
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
+  }
+  .section_6
+  {
+    .header > h2
+    {
+      color: #333;
+    }
+
+    .body
+    {
+      padding: 10px;
+      color: #121212;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
   }
 `;
 
+const COLORS = ["#fb8500", "#2a9d8f", "#00b4d8", "#9a8c98", "#a53860", "#efcefa"];
+const data = [1, 2, 3, 4, 5, 6];
 
-const InnerElements = ({ zIndex }: { zIndex: number }) =>
+const InnerElements = ({ zIndex, total }: { zIndex: number, total: number }) =>
 {
-  return <div style={{ zIndex }} className={`section section_${zIndex}`}>
-    
+  let z =  total - zIndex;
+  return <div style={{ zIndex: z, backgroundColor: COLORS[zIndex - 1] }} className={`section section_${zIndex}`}>
+    <div className="header">
+      <h2>This is title</h2>
+    </div>
+
+    <div className="body">
+      this is body but not reqular body you liitle rant !
+    </div>
   </div>
+  
 }
 
 //* found polygon relation between cordinates 
@@ -50,11 +159,11 @@ const HomePage = () =>
 
     const { scrollHeight, clientHeight } = document.documentElement
     const boxs = boxParentRef.current!.querySelectorAll(".section") as NodeListOf<HTMLDialogElement>;
-    const t = ((scrollHeight - clientHeight) * 0.5) / [...boxs].length;
-    const boxsInstence = [...boxs].map((_box, i) =>
+    const boxPosition = ((scrollHeight - clientHeight) * 0.5) / [...boxs].length;
+    const boxsInstence = [...boxs].map((_box, _index) =>
     {
 
-      return { target: _box, scrollYPosition: (i * t) - (-180) }
+      return { target: _box, scrollYPosition: (_index * boxPosition) - (-180) }
 
     })
 
@@ -66,11 +175,11 @@ const HomePage = () =>
       {
         
         const _box = boxsInstence[i];
-        let tl = Math.ceil(Math.max(-180, Math.min(((scrollY - _box.scrollYPosition) * 0.07), 200))) //*
-        let bb = Math.ceil(Math.max(0, Math.min(((scrollY - _box.scrollYPosition) * 0.025), 100))) //*
-        if (tl === 200 && bb === 100) continue
+        let x1 = Math.ceil(Math.max(-180, Math.min(((scrollY - _box.scrollYPosition) * 0.07), 200))) //*
+        let x4 = Math.ceil(Math.max(0, Math.min(((scrollY - _box.scrollYPosition) * 0.025), 100))) //*
+        if (x1 === 202 && x4 === 100) continue
         _box.target.style.clipPath = `
-          polygon(${tl}% 0%, 100% 0%, 100% 100%, ${bb}% 100%)
+          polygon(${x1}% 0%, 100% 0%, 100% 100%, ${x4}% 100%)
         `;
 
       }
@@ -89,9 +198,9 @@ const HomePage = () =>
 
   return <Wrapper ref={wrapperRef}>
     <div className="box" ref={boxParentRef}>
-      {[1, 2, 3, 4, 5, 6].map(_zIndex =>
+      {data.map(_zIndex =>
       {
-        return <InnerElements zIndex={_zIndex} />
+        return <InnerElements zIndex={_zIndex} key={_zIndex} total={data.length} />
       })}
     </div>
   </Wrapper>
